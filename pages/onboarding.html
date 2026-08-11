@@ -19,13 +19,8 @@
   <header class="site-header">
     <nav class="navbar navbar-expand-lg">
       <div class="container py-2">
-        <a class="brand" href="../index.html" aria-label="NexaFlow início">
-          <span class="brand-mark">N</span>
-          <span>Nexa<span>Flow</span></span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#onboardingNav" aria-controls="onboardingNav" aria-expanded="false" aria-label="Abrir menu">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="brand" href="../index.html" aria-label="NexaFlow início"><span class="brand-mark">N</span><span>Nexa<span>Flow</span></span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#onboardingNav" aria-controls="onboardingNav" aria-expanded="false" aria-label="Abrir menu"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="onboardingNav">
           <ul class="navbar-nav mx-auto gap-lg-2">
             <li class="nav-item"><a class="nav-link" href="../index.html#recursos">Recursos</a></li>
@@ -33,9 +28,7 @@
             <li class="nav-item"><a class="nav-link" href="../index.html#planos">Planos</a></li>
             <li class="nav-item"><a class="nav-link" href="../index.html#faq">FAQ</a></li>
           </ul>
-          <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-            <a class="btn btn-link nav-login" href="login.html">Entrar</a>
-          </div>
+          <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0"><a class="btn btn-link nav-login" href="login.html">Entrar</a></div>
         </div>
       </div>
     </nav>
@@ -51,83 +44,35 @@
         </div>
 
         <div class="onboarding-progress">
-          <div class="progress-labels">
-            <span class="step-pill active">1</span>
-            <span class="step-pill">2</span>
-            <span class="step-pill">3</span>
-            <span class="step-pill">4</span>
-          </div>
+          <div class="progress-labels"><span class="step-pill active">1</span><span class="step-pill">2</span><span class="step-pill">3</span><span class="step-pill">4</span></div>
           <div class="progress-bar"><div class="progress-fill"></div></div>
           <div class="progress-text">Etapa 1 de 4</div>
         </div>
 
-        <form class="onboarding-form">
+        <form class="onboarding-form" novalidate>
           <div class="onboarding-step active" data-step="1">
-            <div class="step-title">
-              <h2>Seu negócio</h2>
-              <p>Informe os dados principais da sua empresa.</p>
-            </div>
+            <div class="step-title"><h2>Seu negócio</h2><p>Informe os dados principais da sua empresa.</p></div>
             <div class="field-grid">
-              <div>
-                <label for="company-name" class="form-label">Nome da empresa</label>
-                <input id="company-name" type="text" class="form-control" placeholder="Nexa Beauty">
-              </div>
-              <div>
-                <label for="industry" class="form-label">Segmento</label>
-                <select id="industry" class="form-control">
-                  <option value="">Selecione</option>
-                  <option>Beleza</option>
-                  <option>Saúde</option>
-                  <option>Educação</option>
-                  <option>Serviços</option>
-                  <option>Outros</option>
-                </select>
-              </div>
-              <div>
-                <label for="phone" class="form-label">Telefone</label>
-                <input id="phone" type="tel" class="form-control" placeholder="(11) 1234-5678">
-              </div>
-              <div>
-                <label for="whatsapp" class="form-label">WhatsApp</label>
-                <input id="whatsapp" type="tel" class="form-control" placeholder="(11) 98765-4321">
-              </div>
+              <div><label for="company-name" class="form-label">Nome da empresa</label><input id="company-name" type="text" class="form-control" placeholder="Nexa Beauty" required></div>
+              <div><label for="industry" class="form-label">Segmento</label><select id="industry" class="form-control" required><option value="">Selecione</option><option>Beleza</option><option>Saúde</option><option>Educação</option><option>Serviços</option><option>Outros</option></select></div>
+              <div><label for="phone" class="form-label">Telefone</label><input id="phone" type="tel" class="form-control" placeholder="(11) 1234-5678"></div>
+              <div><label for="whatsapp" class="form-label">WhatsApp</label><input id="whatsapp" type="tel" class="form-control" placeholder="(11) 98765-4321"></div>
             </div>
           </div>
 
           <div class="onboarding-step" data-step="2">
-            <div class="step-title">
-              <h2>Localização</h2>
-              <p>Adicione o endereço da sua empresa.</p>
-            </div>
+            <div class="step-title"><h2>Localização</h2><p>Adicione o endereço da sua empresa.</p></div>
             <div class="field-grid">
-              <div>
-                <label for="zipcode" class="form-label">CEP</label>
-                <input id="zipcode" type="text" class="form-control" placeholder="01234-567">
-              </div>
-              <div>
-                <label for="city" class="form-label">Cidade</label>
-                <input id="city" type="text" class="form-control" placeholder="São Paulo">
-              </div>
-              <div>
-                <label for="address" class="form-label">Endereço</label>
-                <input id="address" type="text" class="form-control" placeholder="Rua das Flores">
-              </div>
-              <div>
-                <label for="state" class="form-label">Estado</label>
-                <input id="state" type="text" class="form-control" placeholder="SP">
-              </div>
-              <div>
-                <label for="number" class="form-label">Número</label>
-                <input id="number" type="text" class="form-control" placeholder="123">
-              </div>
+              <div><label for="zipcode" class="form-label">CEP</label><input id="zipcode" type="text" class="form-control" placeholder="01234-567"></div>
+              <div><label for="city" class="form-label">Cidade</label><input id="city" type="text" class="form-control" placeholder="São Paulo" required></div>
+              <div><label for="address" class="form-label">Endereço</label><input id="address" type="text" class="form-control" placeholder="Rua das Flores" required></div>
+              <div><label for="state" class="form-label">Estado</label><input id="state" type="text" class="form-control" maxlength="2" placeholder="SP" required></div>
+              <div><label for="number" class="form-label">Número</label><input id="number" type="text" class="form-control" placeholder="123"></div>
             </div>
           </div>
 
           <div class="onboarding-step" data-step="3">
-            <div class="step-title">
-              <h2>Horários</h2>
-              <p>Defina o horário de funcionamento da sua empresa.</p>
-            </div>
+            <div class="step-title"><h2>Horários</h2><p>Defina o horário de funcionamento da sua empresa.</p></div>
             <div class="schedule-grid">
               <div class="schedule-row"><span>Segunda</span><input type="time" value="08:00"><input type="time" value="18:00"></div>
               <div class="schedule-row"><span>Terça</span><input type="time" value="08:00"><input type="time" value="18:00"></div>
@@ -141,25 +86,12 @@
           </div>
 
           <div class="onboarding-step" data-step="4">
-            <div class="step-title">
-              <h2>Finalização</h2>
-              <p>Seu negócio está pronto!</p>
-            </div>
-            <div class="onboarding-summary">
-              <div class="summary-card">
-                <strong>Parabéns!</strong>
-                <p>Agora você pode acessar o dashboard e começar a gerenciar sua agenda, clientes e serviços.</p>
-              </div>
-              <div class="summary-card">
-                <p>Use o botão abaixo para ir ao painel principal do NexaFlow.</p>
-              </div>
-            </div>
+            <div class="step-title"><h2>Finalização</h2><p>Seu negócio está pronto!</p></div>
+            <div class="onboarding-summary"><div class="summary-card"><strong>Parabéns!</strong><p>Agora você pode acessar o dashboard e começar a gerenciar sua agenda, clientes e serviços.</p></div><div class="summary-card"><p>Use o botão abaixo para ir ao painel principal do NexaFlow.</p></div></div>
           </div>
 
-          <div class="onboarding-actions">
-            <button type="button" class="btn btn-outline-custom btn-prev" disabled>Voltar</button>
-            <button type="button" class="btn btn-primary-custom btn-next">Continuar</button>
-          </div>
+          <div id="onboardingAlert" class="alert alert-danger d-none mt-4" role="alert"></div>
+          <div class="onboarding-actions"><button type="button" class="btn btn-outline-custom btn-prev" disabled>Voltar</button><button type="button" class="btn btn-primary-custom btn-next">Continuar</button></div>
         </form>
       </div>
     </div>
@@ -168,25 +100,11 @@
   <footer class="site-footer">
     <div class="container">
       <div class="row g-4 align-items-center">
-        <div class="col-md-6">
-          <a class="brand footer-brand" href="../index.html"><span class="brand-mark">N</span><span>Nexa<span>Flow</span></span></a>
-          <p>Gestão simples para negócios que querem crescer.</p>
-        </div>
-        <div class="col-md-6 text-md-end">
-          <div class="footer-links">
-            <a href="../index.html#recursos">Recursos</a>
-            <a href="../index.html#planos">Planos</a>
-            <a href="../index.html#faq">FAQ</a>
-            <a href="#">Privacidade</a>
-            <a href="#">Termos</a>
-          </div>
-        </div>
+        <div class="col-md-6"><a class="brand footer-brand" href="../index.html"><span class="brand-mark">N</span><span>Nexa<span>Flow</span></span></a><p>Gestão simples para negócios que querem crescer.</p></div>
+        <div class="col-md-6 text-md-end"><div class="footer-links"><a href="../index.html#recursos">Recursos</a><a href="../index.html#planos">Planos</a><a href="../index.html#faq">FAQ</a><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></div>
       </div>
       <hr>
-      <div class="footer-bottom">
-        <span>© 2026 NexaFlow. Todos os direitos reservados.</span>
-        <span>Construído para evoluir.</span>
-      </div>
+      <div class="footer-bottom"><span>© 2026 NexaFlow. Todos os direitos reservados.</span><span>Construído para evoluir.</span></div>
     </div>
   </footer>
 
