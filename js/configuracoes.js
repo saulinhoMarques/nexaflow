@@ -77,8 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
   trocarLogoBtn.addEventListener('click', () => { updatePreview(); showToast('Prévia da logo atualizada.'); });
 
   saveBtn.addEventListener('click', () => {
+    const previous = safeParse(localStorage.getItem('nexaflow-config'), {});
+    const stableSlug = previous?.empresa?.slug || slugify(previous?.empresa?.nome) || slugify(nomeEmpresa.value) || 'empresa';
+
     const data = {
       empresa: {
+        slug: stableSlug,
         nome: nomeEmpresa.value.trim(),
         segmento: document.getElementById('empresaSegmento').value.trim(),
         telefone: document.getElementById('empresaTelefone').value.trim(),
@@ -103,30 +107,38 @@ document.addEventListener('DOMContentLoaded', () => {
         nome: document.getElementById('contaNome').value.trim(),
         email: document.getElementById('contaEmail').value.trim()
       },
-      horarios: dias
+      horarios: dias.map(item => [...item])
     };
 
     localStorage.setItem('nexaflow-config', JSON.stringify(data));
 
-    const slug = slugify(data.empresa.nome) || 'empresa';
     const cache = safeParse(localStorage.getItem('nexaflow-public-company-cache'), {});
     const servicos = safeParse(localStorage.getItem('nexaflow-servicos'), []).filter(item => item.ativo !== false);
     const profissionais = safeParse(localStorage.getItem('nexaflow-profissionais'), []).filter(item => item.ativo !== false);
-    cache[slug] = {
-      ...(cache[slug] || {}),
+    cache[stableSlug] = {
+      ...(cache[stableSlug] || {}),
       ...data.empresa,
       corPrincipal: data.aparencia.corPrincipal,
       corSecundaria: data.aparencia.corSecundaria,
       horarios: data.horarios,
-      servicos: servicos.length ? servicos : cache[slug]?.servicos,
-      profissionais: profissionais.length ? profissionais : cache[slug]?.profissionais
+      servicos: servicos.length ? servicos : cache[stableSlug]?.servicos,
+      profissionais: profissionais.length ? profissionais : cache[stableSlug]?.profissionais
     };
     localStorage.setItem('nexaflow-public-company-cache', JSON.stringify(cache));
+    sessionStorage.removeItem('nexaflow-public-company');
     showToast();
   });
 
   resetBtn.addEventListener('click', () => {
     if (!window.confirm('Restaurar as configurações de demonstração?')) return;
+    const current = safeParse(localStorage.getItem('nexaflow-config'), {});
+    const currentSlug = current?.empresa?.slug || slugify(current?.empresa?.nome);
+    const cache = safeParse(localStorage.getItem('nexaflow-public-company-cache'), {});
+    if (currentSlug && cache[currentSlug]) {
+      delete cache[currentSlug];
+      localStorage.setItem('nexaflow-public-company-cache', JSON.stringify(cache));
+    }
+    sessionStorage.removeItem('nexaflow-public-company');
     localStorage.removeItem('nexaflow-config');
     window.location.reload();
   });
@@ -151,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('contaNome').value = saved.conta.nome || '';
       document.getElementById('contaEmail').value = saved.conta.email || '';
     }
-    if (Array.isArray(saved.horarios)) saved.horarios.forEach((item, index) => { if (dias[index]) dias[index] = item; });
+    if (Array.isArray(saved.horarios)) saved.horarios.forEach((item, index) => { if (dias[index]) dias[index] = [...item]; });
   }
 
   renderSchedule();
