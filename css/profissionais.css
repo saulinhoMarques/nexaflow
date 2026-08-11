@@ -1,0 +1,44 @@
+.profissionais-content { min-width: 0; }
+.profissionais-topbar p { margin: .5rem 0 0; color: var(--nf-text); }
+.profissionais-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.profissionais-summary-card { padding: 1.35rem 1.5rem; border-radius: 22px; background: #eff6ff; border: 1px solid rgba(96,165,250,.12); }
+.profissionais-summary-card span { display: block; color: var(--nf-text); font-weight: 600; margin-bottom: .55rem; }
+.profissionais-summary-card strong { font-size: 2rem; color: var(--nf-primary); }
+.profissionais-panel { border: 1px solid rgba(148,163,184,.18); border-radius: 24px; overflow: hidden; }
+.profissionais-toolbar { display: grid; grid-template-columns: 1fr 220px; gap: 1rem; padding: 1.25rem; background: #f8fafc; }
+.profissionais-toolbar .form-control,
+.profissionais-toolbar .form-select,
+.profissional-modal-content .form-control { border-radius: 15px; border: 1px solid rgba(148,163,184,.28); padding: .9rem 1rem; }
+.profissionais-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding: 1.25rem; }
+.profissional-card { border: 1px solid rgba(148,163,184,.18); border-radius: 22px; padding: 1.35rem; background: #fff; display: grid; gap: 1rem; }
+.profissional-header { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+.profissional-identity { display: flex; gap: 1rem; align-items: center; }
+.profissional-avatar { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(135deg, var(--nf-primary), var(--nf-accent)); color: #fff; font-weight: 800; font-size: 1.1rem; }
+.profissional-card h3 { margin: 0; font-size: 1.08rem; }
+.profissional-card .especialidade { color: var(--nf-text); margin: .2rem 0 0; }
+.profissional-status { padding: .4rem .7rem; border-radius: 999px; font-size: .8rem; font-weight: 800; }
+.profissional-status.ativo { background: #dcfce7; color: #166534; }
+.profissional-status.inativo { background: #fee2e2; color: #991b1b; }
+.profissional-contact { display: grid; gap: .45rem; color: var(--nf-text); font-size: .93rem; }
+.profissional-services { display: flex; flex-wrap: wrap; gap: .5rem; }
+.profissional-service-tag { padding: .42rem .7rem; border-radius: 999px; background: #f1f5f9; color: #334155; font-size: .8rem; font-weight: 700; }
+.profissional-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.profissional-meta div { border-radius: 16px; background: #f8fafc; padding: .85rem; }
+.profissional-meta span { display: block; color: var(--nf-text); font-size: .8rem; margin-bottom: .2rem; }
+.profissional-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.profissional-actions .btn { flex: 1 1 120px; }
+.profissionais-empty { text-align: center; padding: 3rem 1.5rem; }
+.profissionais-empty p { margin: .4rem 0 0; color: var(--nf-text); }
+.profissional-modal-content { border: 0; border-radius: 26px; }
+.servicos-check-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; padding: 1rem; border: 1px solid rgba(148,163,184,.18); border-radius: 18px; background: #f8fafc; }
+.servicos-check-grid .form-check { margin: 0; }
+@media (max-width: 991.98px) {
+  .profissionais-summary,
+  .profissionais-grid { grid-template-columns: 1fr; }
+  .profissionais-toolbar { grid-template-columns: 1fr; }
+}
+@media (max-width: 575.98px) {
+  .profissional-header { flex-direction: column; }
+  .profissional-meta,
+  .servicos-check-grid { grid-template-columns: 1fr; }
+}
