@@ -27,6 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const campoInicio = document.getElementById('profissionalInicio');
   const campoFim = document.getElementById('profissionalFim');
   const campoAtivo = document.getElementById('profissionalAtivo');
+  const servicosGrid = document.querySelector('.servicos-check-grid');
+  const servicosCadastrados = safeParse(localStorage.getItem('nexaflow-servicos'), []).filter(item => item.ativo !== false);
+  if (servicosGrid && servicosCadastrados.length) {
+    servicosGrid.innerHTML = servicosCadastrados.map(servico => `<label class="form-check"><input class="form-check-input profissional-servico" type="checkbox" value="${servico.nome}"><span class="form-check-label">${servico.nome}</span></label>`).join('');
+  }
   const checkServicos = Array.from(document.querySelectorAll('.profissional-servico'));
   const modalTitle = document.getElementById('profissionalModalLabel');
   const normalizar = valor => String(valor || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
