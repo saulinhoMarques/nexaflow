@@ -6,9 +6,20 @@
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const initialTheme = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
 
-  root.dataset.theme = initialTheme;
+  function applyDocumentTheme(theme) {
+    root.dataset.theme = theme;
+    root.setAttribute('data-bs-theme', theme);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#020617' : '#ffffff');
+  }
 
-  if (script?.src && !document.querySelector('link[data-nf-theme]')) {
+  applyDocumentTheme(initialTheme);
+
+  const themeAlreadyLoaded = Array.from(document.styleSheets).some(sheet => {
+    try { return sheet.href && sheet.href.includes('/css/theme.css'); } catch (_) { return false; }
+  });
+
+  if (script?.src && !themeAlreadyLoaded && !document.querySelector('link[data-nf-theme]')) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = new URL('../css/theme.css', script.src).href;
@@ -25,7 +36,7 @@
   }
 
   function setTheme(theme) {
-    root.dataset.theme = theme;
+    applyDocumentTheme(theme);
     localStorage.setItem(STORAGE_KEY, theme);
     document.querySelectorAll('.nf-theme-toggle').forEach(updateButton);
     window.dispatchEvent(new CustomEvent('nexaflow:themechange', { detail: { theme } }));
