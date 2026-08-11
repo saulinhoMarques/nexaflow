@@ -1,0 +1,26 @@
+.feature-card { height: 100%; padding: 30px; border: 1px solid var(--nf-border); border-radius: var(--nf-radius); background: #fff; transition: .25s ease; }
+.feature-card:hover { transform: translateY(-5px); box-shadow: var(--nf-shadow); border-color: #dbeafe; }
+.icon-box { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 13px; background: #eff6ff; color: var(--nf-primary); font-size: 1.25rem; font-weight: 800; margin-bottom: 20px; }
+.feature-card h3, .step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+.feature-card p, .step-card p { color: var(--nf-text); line-height: 1.7; margin-bottom: 18px; }
+.feature-card a { color: var(--nf-primary); font-size: .9rem; font-weight: 700; }
+.step-card { height: 100%; padding: 32px; border-radius: var(--nf-radius); background: #fff; border: 1px solid var(--nf-border); }
+.step-card > span { display: inline-block; margin-bottom: 45px; color: var(--nf-primary); font-weight: 800; font-size: .85rem; }
+.pricing-card { position: relative; height: 100%; padding: 34px; border: 1px solid var(--nf-border); border-radius: var(--nf-radius); background: #fff; }
+.pricing-card.featured { border: 2px solid var(--nf-primary); box-shadow: 0 20px 60px rgba(37,99,235,.12); }
+.pricing-card h3 { font-weight: 800; }
+.pricing-card > p { color: var(--nf-muted); min-height: 48px; }
+.price { margin: 25px 0; font-size: 2.5rem; font-weight: 800; letter-spacing: -.05em; }
+.price small { color: var(--nf-muted); font-size: .9rem; font-weight: 500; letter-spacing: 0; }
+.pricing-card ul { list-style: none; padding: 0; margin: 0 0 28px; }
+.pricing-card li { padding: 8px 0; color: var(--nf-text); }
+.pricing-card li::before { content: '✓'; color: var(--nf-success); font-weight: 800; margin-right: 9px; }
+.popular { position: absolute; top: 20px; right: 20px; padding: 5px 9px; border-radius: 99px; background: #eff6ff; color: var(--nf-primary); font-size: .72rem; font-weight: 800; }
+.accordion.faq-list { max-width: 820px; }
+.faq-list .accordion-item { border: 1px solid var(--nf-border); margin-bottom: 10px; border-radius: 12px !important; overflow: hidden; }
+.faq-list .accordion-button { font-weight: 700; padding: 20px; box-shadow: none; }
+.faq-list .accordion-button:not(.collapsed) { color: var(--nf-primary); background: #f8fbff; }
+.faq-list .accordion-body { color: var(--nf-text); line-height: 1.7; }
+.cta-box { padding: 75px 30px; border-radius: 28px; color: #fff; background: linear-gradient(135deg, #172554, #312e81); overflow: hidden; position: relative; }
+.cta-box h2 { margin: 14px 0; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; letter-spacing: -.045em; }
+.cta-box p { color: #c7d2fe; max-width: 600px; margin: 0 auto 25px; line-height: 1.7; }
