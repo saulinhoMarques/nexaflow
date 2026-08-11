@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Recuperação de senha do NexaFlow.">
+  <title>Recuperar senha — NexaFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    body { background: var(--nf-surface); }
+    .auth-page { min-height: 100vh; display:grid; place-items:center; padding:4rem 0; }
+    .auth-card { max-width:520px; margin:auto; background:#fff; border:1px solid rgba(148,163,184,.18); border-radius:28px; box-shadow:0 30px 80px rgba(15,23,42,.08); padding:2.5rem; }
+    .form-control { border-radius:16px; padding:1rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header"><nav class="navbar"><div class="container py-2"><a class="brand" href="../index.html"><span class="brand-mark">N</span><span>Nexa<span>Flow</span></span></a><a class="btn btn-outline-custom" href="login.html">Voltar ao login</a></div></nav></header>
+  <main class="auth-page">
+    <div class="container">
+      <div class="auth-card">
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Recuperação de acesso</span>
+        <h1 class="mt-2">Recuperar senha</h1>
+        <p class="text-secondary">Informe seu e-mail. Quando o Supabase Auth estiver conectado, o NexaFlow enviará o link real de redefinição.</p>
+        <form id="recoveryForm">
+          <label for="recoveryEmail" class="form-label">E-mail</label>
+          <input id="recoveryEmail" class="form-control mb-3" type="email" autocomplete="email" required placeholder="seu@exemplo.com">
+          <button class="btn btn-primary-custom w-100" type="submit">Enviar link de recuperação</button>
+        </form>
+        <div id="recoveryResult" class="alert alert-success d-none mt-3 mb-0" role="status">Se este e-mail estiver cadastrado, você receberá as instruções de recuperação.</div>
+      </div>
+    </div>
+  </main>
+  <script>
+    document.getElementById('recoveryForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (!this.checkValidity()) { this.reportValidity(); return; }
+      document.getElementById('recoveryResult').classList.remove('d-none');
+    });
+  </script>
+</body>
+</html>
