@@ -34,10 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const servicos = Array.isArray(servicosStore) && servicosStore.length ? servicosStore.filter(s => s.ativo !== false).map(s => ({ nome: s.nome, duracao: Number(s.duracao) || 30 })) : [...defaultServicos];
   const profissionais = Array.isArray(profissionaisStore) && profissionaisStore.length ? profissionaisStore.filter(p => p.ativo !== false).map(p => p.nome) : [...defaultProfissionais];
 
-  let internos = safeParse(localStorage.getItem(INTERNAL_KEY), null);
-  if (!Array.isArray(internos)) internos = structuredClone(defaultAgenda);
-  internos = internos.filter(item => !item.companySlug || item.companySlug === companySlug).map(item => ({ ...item, companySlug, origem: item.origem || 'interno' }));
-  localStorage.setItem(INTERNAL_KEY, JSON.stringify(internos));
+  let allInternal = safeParse(localStorage.getItem(INTERNAL_KEY), null);
+  if (!Array.isArray(allInternal)) allInternal = structuredClone(defaultAgenda);
+  const outrosInternos = allInternal.filter(item => item.companySlug && item.companySlug !== companySlug);
+  let internos = allInternal.filter(item => !item.companySlug || item.companySlug === companySlug).map(item => ({ ...item, companySlug, origem: item.origem || 'interno' }));
+  localStorage.setItem(INTERNAL_KEY, JSON.stringify([...outrosInternos, ...internos]));
 
   const getPublicBookings = () => safeParse(localStorage.getItem(PUBLIC_KEY), []);
   const publicos = getPublicBookings().filter(item => item.companySlug === companySlug).map(item => ({ ...item, origem: 'publico' }));
