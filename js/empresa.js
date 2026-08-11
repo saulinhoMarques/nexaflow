@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let slug = requestedSlug || (config?.empresa?.nome ? criarSlug(config.empresa.nome) : 'barbearia-imperial');
   let empresa = structuredClone(empresas[slug] || cache[slug] || empresas['barbearia-imperial']);
 
-  if (!requestedSlug && config) {
+  const configSlug = config?.empresa?.nome ? criarSlug(config.empresa.nome) : '';
+  if (config && (!requestedSlug || configSlug === slug)) {
     empresa = {
       ...empresa,
       ...(config.empresa || {}),
