@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   const defaultProfissionais = ['Carlos Mendes', 'Ana Souza', 'Marina Lima'];
   const defaultAgenda = [
-    { id: 1, companySlug, cliente: 'João Silva', servico: 'Corte masculino', profissional: 'Carlos Mendes', data: addDays(0), hora: '09:00', status: 'confirmado', observacoes: '', origem: 'interno' },
-    { id: 2, companySlug, cliente: 'Pedro Santos', servico: 'Barba', profissional: 'Carlos Mendes', data: addDays(0), hora: '10:00', status: 'concluido', observacoes: '', origem: 'interno' },
-    { id: 3, companySlug, cliente: 'Ana Costa', servico: 'Manicure', profissional: 'Ana Souza', data: addDays(0), hora: '14:00', status: 'confirmado', observacoes: '', origem: 'interno' },
-    { id: 4, companySlug, cliente: 'Marcos Oliveira', servico: 'Escova', profissional: 'Marina Lima', data: addDays(0), hora: '16:30', status: 'pendente', observacoes: '', origem: 'interno' },
-    { id: 5, companySlug, cliente: 'Lucas Martins', servico: 'Corte masculino', profissional: 'Carlos Mendes', data: addDays(1), hora: '11:00', status: 'confirmado', observacoes: '', origem: 'interno' }
+    { id: 1, companySlug, cliente: 'João Silva', servico: 'Corte masculino', duracao: 30, profissional: 'Carlos Mendes', data: addDays(0), hora: '09:00', status: 'confirmado', observacoes: '', origem: 'interno' },
+    { id: 2, companySlug, cliente: 'Pedro Santos', servico: 'Barba', duracao: 20, profissional: 'Carlos Mendes', data: addDays(0), hora: '10:00', status: 'concluido', observacoes: '', origem: 'interno' },
+    { id: 3, companySlug, cliente: 'Ana Costa', servico: 'Manicure', duracao: 45, profissional: 'Ana Souza', data: addDays(0), hora: '14:00', status: 'confirmado', observacoes: '', origem: 'interno' },
+    { id: 4, companySlug, cliente: 'Marcos Oliveira', servico: 'Escova', duracao: 60, profissional: 'Marina Lima', data: addDays(0), hora: '16:30', status: 'pendente', observacoes: '', origem: 'interno' },
+    { id: 5, companySlug, cliente: 'Lucas Martins', servico: 'Corte masculino', duracao: 30, profissional: 'Carlos Mendes', data: addDays(1), hora: '11:00', status: 'confirmado', observacoes: '', origem: 'interno' }
   ];
 
   const clientesStore = safeParse(localStorage.getItem('nexaflow-clientes'), []);
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const publicos = getPublicBookings().filter(item => item.companySlug === companySlug).map(item => ({ ...item, origem: 'publico' }));
   const agendamentos = [...internos, ...publicos.filter(p => !internos.some(i => Number(i.id) === Number(p.id)))];
 
-  publicos.forEach(b => {
+  agendamentos.forEach(b => {
     if (b.cliente && !clientes.includes(b.cliente)) clientes.push(b.cliente);
     if (b.profissional && !profissionais.includes(b.profissional)) profissionais.push(b.profissional);
     if (b.servico && !servicos.some(s => s.nome === b.servico)) servicos.push({ nome: b.servico, duracao: Number(b.duracao) || 30 });
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function temConflito(novo, ignoreId) {
     const servico = servicos.find(s => s.nome === novo.servico);
-    const duracao = Number(servico?.duracao) || 30;
+    const duracao = Number(servico?.duracao) || Number(novo.duracao) || 30;
     const inicioNovo = toMinutes(novo.hora);
     const fimNovo = inicioNovo + duracao;
     return agendamentos.some(a => {
@@ -207,7 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
     if (!form.checkValidity()) { form.classList.add('was-validated'); return; }
     const id = Number(idField.value);
-    const dados = { cliente: clienteField.value, servico: servicoField.value, profissional: profissionalField.value, data: dataField.value, hora: horaField.value, status: statusField.value, observacoes: obsField.value.trim() };
+    const servicoSelecionado = servicos.find(item => item.nome === servicoField.value);
+    const dados = { cliente: clienteField.value, servico: servicoField.value, duracao: Number(servicoSelecionado?.duracao) || 30, profissional: profissionalField.value, data: dataField.value, hora: horaField.value, status: statusField.value, observacoes: obsField.value.trim() };
     if (temConflito(dados, id || null)) {
       conflictAlert.textContent = 'Conflito de horário: este profissional já possui outro atendimento nesse intervalo.';
       conflictAlert.classList.remove('d-none');
