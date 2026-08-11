@@ -1,0 +1,16 @@
+:root {
+  --nf-primary: #2563eb;
+  --nf-primary-dark: #1d4ed8;
+  --nf-accent: #7c3aed;
+  --nf-ink: #111827;
+  --nf-text: #475569;
+  --nf-muted: #64748b;
+  --nf-bg: #f8fafc;
+  --nf-surface: #ffffff;
+  --nf-border: #e2e8f0;
+  --nf-success: #16a34a;
+  --nf-radius: 18px;
+  --nf-radius-sm: 12px;
+  --nf-shadow: 0 20px 60px rgba(15, 23, 42, .08);
+  --nf-container: 1160px;
+}
