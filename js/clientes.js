@@ -11,9 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const safeParse = (value, fallback) => { try { return JSON.parse(value) ?? fallback; } catch (_) { return fallback; } };
   const stored = safeParse(localStorage.getItem(STORAGE_KEY), null);
   const clientes = Array.isArray(stored) ? stored : structuredClone(defaults);
+  const slugify = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const config = safeParse(localStorage.getItem('nexaflow-config'), {});
+  const companySlug = slugify(config?.empresa?.nome) || 'barbearia-imperial';
 
   const publicBookings = safeParse(localStorage.getItem('nexaflow-public-bookings'), []);
-  publicBookings.forEach(booking => {
+  publicBookings.filter(booking => booking.companySlug === companySlug).forEach(booking => {
     if (!booking.cliente) return;
     const existing = clientes.find(c => c.nome.toLowerCase() === booking.cliente.toLowerCase());
     const historyEntry = `${booking.servico || 'Atendimento'} — ${booking.data || ''}, ${booking.hora || ''}`;
