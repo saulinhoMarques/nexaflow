@@ -19,28 +19,20 @@
     .auth-card { max-width: 520px; width: 100%; background: #fff; border: 1px solid rgba(148,163,184,.18); border-radius: 28px; box-shadow: 0 30px 80px rgba(15,23,42,.08); padding: 2.5rem; }
     .auth-card h1 { margin-bottom: 0.75rem; font-size: clamp(2rem, 2.5vw, 2.7rem); }
     .auth-card p { color: var(--nf-text); margin-bottom: 2rem; }
-    .form-control { border-radius: 16px; border: 1px solid rgba(148,163,184,.28); padding: 1rem 1rem; }
+    .form-control { border-radius: 16px; border: 1px solid rgba(148,163,184,.28); padding: 1rem; }
     .form-control:focus { box-shadow: 0 0 0 0.2rem rgba(37,99,235,.12); border-color: var(--nf-primary); }
     .auth-footer { margin-top: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; color: #64748b; }
     .auth-footer a { color: var(--nf-primary); }
     .form-check-label { user-select: none; }
-    @media (max-width: 575.98px) {
-      .auth-card { padding: 1.75rem; }
-      .auth-footer { flex-direction: column; align-items: flex-start; }
-    }
+    @media (max-width: 575.98px) { .auth-card { padding: 1.75rem; } .auth-footer { flex-direction: column; align-items: flex-start; } }
   </style>
 </head>
 <body>
   <header class="site-header">
     <nav class="navbar navbar-expand-lg">
       <div class="container py-2">
-        <a class="brand" href="../index.html" aria-label="NexaFlow início">
-          <span class="brand-mark">N</span>
-          <span>Nexa<span>Flow</span></span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#authNav" aria-controls="authNav" aria-expanded="false" aria-label="Abrir menu">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="brand" href="../index.html" aria-label="NexaFlow início"><span class="brand-mark">N</span><span>Nexa<span>Flow</span></span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#authNav" aria-controls="authNav" aria-expanded="false" aria-label="Abrir menu"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="authNav">
           <ul class="navbar-nav mx-auto gap-lg-2">
             <li class="nav-item"><a class="nav-link" href="../index.html#recursos">Recursos</a></li>
@@ -48,10 +40,7 @@
             <li class="nav-item"><a class="nav-link" href="../index.html#planos">Planos</a></li>
             <li class="nav-item"><a class="nav-link" href="../index.html#faq">FAQ</a></li>
           </ul>
-          <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-            <a class="btn btn-link nav-login" href="login.html">Entrar</a>
-            <a class="btn btn-primary-custom" href="cadastro.html">Criar conta</a>
-          </div>
+          <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0"><a class="btn btn-link nav-login" href="login.html">Entrar</a><a class="btn btn-primary-custom" href="cadastro.html">Criar conta</a></div>
         </div>
       </div>
     </nav>
@@ -64,31 +53,25 @@
           <div class="auth-card">
             <span class="eyebrow"><span class="eyebrow-dot"></span> Acesso ao NexaFlow</span>
             <h1>Entrar na sua conta</h1>
-            <p>Gerencie clientes, serviços e agendamentos com segurança. Entre usando seu e-mail e senha.</p>
+            <p>Gerencie clientes, serviços e agendamentos. Nesta versão de demonstração, o login encaminha ao painel após a validação básica do formulário.</p>
 
             <form action="dashboard.html">
               <div class="mb-3">
                 <label for="email" class="form-label">E-mail</label>
-                <input id="email" type="email" class="form-control" placeholder="seu@exemplo.com">
+                <input id="email" name="email" type="email" class="form-control" placeholder="seu@exemplo.com" autocomplete="email" required>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Senha</label>
-                <input id="password" type="password" class="form-control" placeholder="••••••••">
+                <input id="password" name="password" type="password" class="form-control" placeholder="••••••••" autocomplete="current-password" minlength="6" required>
               </div>
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="remember">
-                  <label class="form-check-label" for="remember">Lembrar-me</label>
-                </div>
-                <a href="#">Esqueci minha senha</a>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="1" id="remember"><label class="form-check-label" for="remember">Lembrar-me</label></div>
+                <a href="recuperar-senha.html">Esqueci minha senha</a>
               </div>
               <button type="submit" class="btn btn-primary-custom btn-lg w-100">Entrar</button>
             </form>
 
-            <div class="auth-footer">
-              <p>Não tem conta ainda? <a href="cadastro.html">Criar conta</a></p>
-              <a href="../index.html">← Voltar à página inicial</a>
-            </div>
+            <div class="auth-footer"><p>Não tem conta ainda? <a href="cadastro.html">Criar conta</a></p><a href="../index.html">← Voltar à página inicial</a></div>
           </div>
         </div>
       </div>
@@ -98,25 +81,11 @@
   <footer class="site-footer">
     <div class="container">
       <div class="row g-4 align-items-center">
-        <div class="col-md-6">
-          <a class="brand footer-brand" href="../index.html"><span class="brand-mark">N</span><span>Nexa<span>Flow</span></span></a>
-          <p>Gestão simples para negócios que querem crescer.</p>
-        </div>
-        <div class="col-md-6 text-md-end">
-          <div class="footer-links">
-            <a href="../index.html#recursos">Recursos</a>
-            <a href="../index.html#planos">Planos</a>
-            <a href="../index.html#faq">FAQ</a>
-            <a href="#">Privacidade</a>
-            <a href="#">Termos</a>
-          </div>
-        </div>
+        <div class="col-md-6"><a class="brand footer-brand" href="../index.html"><span class="brand-mark">N</span><span>Nexa<span>Flow</span></span></a><p>Gestão simples para negócios que querem crescer.</p></div>
+        <div class="col-md-6 text-md-end"><div class="footer-links"><a href="../index.html#recursos">Recursos</a><a href="../index.html#planos">Planos</a><a href="../index.html#faq">FAQ</a><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos</a></div></div>
       </div>
       <hr>
-      <div class="footer-bottom">
-        <span>© 2026 NexaFlow. Todos os direitos reservados.</span>
-        <span>Construído para evoluir.</span>
-      </div>
+      <div class="footer-bottom"><span>© 2026 NexaFlow. Todos os direitos reservados.</span><span>Construído para evoluir.</span></div>
     </div>
   </footer>
 
