@@ -60,6 +60,30 @@ document.addEventListener('DOMContentLoaded', () => {
     window.history.replaceState({}, '', url);
   }
 
+  function migrateCompanySlug(oldSlug, newSlug) {
+    if (!oldSlug || !newSlug || oldSlug === newSlug) return;
+
+    ['nexaflow-agendamentos', 'nexaflow-public-bookings'].forEach(key => {
+      const items = safeParse(localStorage.getItem(key), []);
+      if (!Array.isArray(items)) return;
+      let changed = false;
+      const migrated = items.map(item => {
+        if (item?.companySlug !== oldSlug) return item;
+        changed = true;
+        return { ...item, companySlug: newSlug };
+      });
+      if (changed) localStorage.setItem(key, JSON.stringify(migrated));
+    });
+
+    const cache = safeParse(localStorage.getItem('nexaflow-public-company-cache'), {});
+    if (cache && typeof cache === 'object' && cache[oldSlug]) {
+      cache[newSlug] = { ...cache[oldSlug], ...(cache[newSlug] || {}) };
+      delete cache[oldSlug];
+      localStorage.setItem('nexaflow-public-company-cache', JSON.stringify(cache));
+    }
+    sessionStorage.removeItem('nexaflow-public-company');
+  }
+
   tabs.forEach(tab => tab.addEventListener('click', () => activateTab(tab.dataset.tab)));
 
   schedule.addEventListener('change', event => {
@@ -78,11 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   saveBtn.addEventListener('click', () => {
     const previous = safeParse(localStorage.getItem('nexaflow-config'), {});
-    const stableSlug = previous?.empresa?.slug || slugify(previous?.empresa?.nome) || slugify(nomeEmpresa.value) || 'empresa';
+    const oldSlug = previous?.empresa?.slug || slugify(previous?.empresa?.nome);
+    const newSlug = slugify(nomeEmpresa.value) || oldSlug || 'empresa';
 
     const data = {
       empresa: {
-        slug: stableSlug,
+        slug: newSlug,
         nome: nomeEmpresa.value.trim(),
         segmento: document.getElementById('empresaSegmento').value.trim(),
         telefone: document.getElementById('empresaTelefone').value.trim(),
@@ -110,19 +135,20 @@ document.addEventListener('DOMContentLoaded', () => {
       horarios: dias.map(item => [...item])
     };
 
+    migrateCompanySlug(oldSlug, newSlug);
     localStorage.setItem('nexaflow-config', JSON.stringify(data));
 
     const cache = safeParse(localStorage.getItem('nexaflow-public-company-cache'), {});
     const servicos = safeParse(localStorage.getItem('nexaflow-servicos'), []).filter(item => item.ativo !== false);
     const profissionais = safeParse(localStorage.getItem('nexaflow-profissionais'), []).filter(item => item.ativo !== false);
-    cache[stableSlug] = {
-      ...(cache[stableSlug] || {}),
+    cache[newSlug] = {
+      ...(cache[newSlug] || {}),
       ...data.empresa,
       corPrincipal: data.aparencia.corPrincipal,
       corSecundaria: data.aparencia.corSecundaria,
       horarios: data.horarios,
-      servicos: servicos.length ? servicos : cache[stableSlug]?.servicos,
-      profissionais: profissionais.length ? profissionais : cache[stableSlug]?.profissionais
+      servicos: servicos.length ? servicos : cache[newSlug]?.servicos,
+      profissionais: profissionais.length ? profissionais : cache[newSlug]?.profissionais
     };
     localStorage.setItem('nexaflow-public-company-cache', JSON.stringify(cache));
     sessionStorage.removeItem('nexaflow-public-company');
