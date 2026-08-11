@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const hora = new Date().getHours();
   const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
 
+  document.querySelectorAll('.footer-links a[href="#"]').forEach(link => {
+    const label = link.textContent.trim().toLowerCase();
+    if (label.includes('privacidade')) link.href = 'privacidade.html';
+    if (label.includes('termos')) link.href = 'termos.html';
+  });
+
   if (pageTitle) pageTitle.textContent = `${saudacao}, ${primeiroNome} 👋`;
   if (pageSubtitle) {
     const empresa = config?.empresa?.nome;
