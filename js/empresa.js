@@ -15,32 +15,32 @@ document.addEventListener('DOMContentLoaded', () => {
         { nome: 'Sobrancelha', preco: 15, duracao: 15, descricao: 'Design e acabamento de sobrancelha.' }
       ],
       profissionais: [
-        { nome: 'Carlos Mendes', especialidade: 'Barbeiro', servicos: ['Corte masculino', 'Barba'] },
-        { nome: 'Rafael Alves', especialidade: 'Barbeiro', servicos: ['Corte masculino', 'Corte + Barba'] },
-        { nome: 'Marina Lima', especialidade: 'Cabeleireira', servicos: ['Sobrancelha'] }
+        { nome: 'Carlos Mendes', especialidade: 'Barbeiro', servicos: ['Corte masculino', 'Barba'], inicio: '08:00', fim: '18:00' },
+        { nome: 'Rafael Alves', especialidade: 'Barbeiro', servicos: ['Corte masculino', 'Corte + Barba'], inicio: '08:00', fim: '17:00' },
+        { nome: 'Marina Lima', especialidade: 'Cabeleireira', servicos: ['Sobrancelha'], inicio: '10:00', fim: '18:00' }
       ],
       horarios: [['Segunda','08:00','18:00',true],['Terça','08:00','18:00',true],['Quarta','08:00','18:00',true],['Quinta','08:00','18:00',true],['Sexta','08:00','18:00',true],['Sábado','08:00','14:00',true],['Domingo','08:00','18:00',false]]
     },
     'studio-ana': {
       nome: 'Studio Ana', segmento: 'Beleza', headline: 'Seu momento de cuidado começa aqui.', descricao: 'Beleza, unhas e autocuidado em um espaço feito para você.', telefone: '(11) 3555-1010', whatsapp: '(11) 98888-2020', email: 'oi@studioana.com.br', instagram: '@studioana', endereco: 'Rua das Flores', numero: '82', cidade: 'Jundiaí', estado: 'SP', corPrincipal: '#db2777', corSecundaria: '#9333ea',
       servicos: [{ nome:'Manicure',preco:32,duracao:45,descricao:'Cuidado completo para unhas das mãos.' },{ nome:'Pedicure',preco:38,duracao:50,descricao:'Cuidado e acabamento para os pés.' },{ nome:'Escova',preco:55,duracao:60,descricao:'Finalização profissional para diferentes tipos de cabelo.' }],
-      profissionais: [{ nome:'Ana Souza',especialidade:'Manicure',servicos:['Manicure','Pedicure'] },{ nome:'Marina Lima',especialidade:'Cabeleireira',servicos:['Escova'] }],
+      profissionais: [{ nome:'Ana Souza',especialidade:'Manicure',servicos:['Manicure','Pedicure'],inicio:'09:00',fim:'18:00' },{ nome:'Marina Lima',especialidade:'Cabeleireira',servicos:['Escova'],inicio:'10:00',fim:'19:00' }],
       horarios: [['Segunda','09:00','19:00',true],['Terça','09:00','19:00',true],['Quarta','09:00','19:00',true],['Quinta','09:00','19:00',true],['Sexta','09:00','19:00',true],['Sábado','09:00','17:00',true],['Domingo','09:00','17:00',false]]
     },
     'clinica-sorriso': {
       nome: 'Clínica Sorriso', segmento: 'Saúde', headline: 'Cuidar do seu sorriso pode ser simples.', descricao: 'Atendimento odontológico humanizado, organizado e próximo de você.', telefone: '(11) 3222-4500', whatsapp: '(11) 97777-4500', email: 'contato@clinicasorriso.com.br', instagram: '@clinicasorriso', endereco: 'Avenida Central', numero: '450', cidade: 'Campinas', estado: 'SP', corPrincipal: '#0891b2', corSecundaria: '#2563eb',
-      servicos: [{ nome:'Avaliação',preco:80,duracao:40,descricao:'Consulta inicial e avaliação completa.' },{ nome:'Limpeza',preco:160,duracao:60,descricao:'Profilaxia profissional para prevenção e cuidado.' },{ nome:'Clareamento',preco:650,duracao:90,descricao:'Tratamento para realçar a aparência do sorriso.' }],
-      profissionais: [{ nome:'Dra. Júlia Ramos',especialidade:'Dentista',servicos:['Avaliação','Limpeza']},{nome:'Dr. Pedro Alves',especialidade:'Dentista',servicos:['Avaliação','Clareamento']}],
+      servicos: [{nome:'Avaliação',preco:80,duracao:40,descricao:'Consulta inicial e avaliação completa.'},{nome:'Limpeza',preco:160,duracao:60,descricao:'Profilaxia profissional para prevenção e cuidado.'},{nome:'Clareamento',preco:650,duracao:90,descricao:'Tratamento para realçar a aparência do sorriso.'}],
+      profissionais: [{nome:'Dra. Júlia Ramos',especialidade:'Dentista',servicos:['Avaliação','Limpeza'],inicio:'08:00',fim:'18:00'},{nome:'Dr. Pedro Alves',especialidade:'Dentista',servicos:['Avaliação','Clareamento'],inicio:'09:00',fim:'18:00'}],
       horarios: [['Segunda','08:00','18:00',true],['Terça','08:00','18:00',true],['Quarta','08:00','18:00',true],['Quinta','08:00','18:00',true],['Sexta','08:00','18:00',true],['Sábado','08:00','12:00',true],['Domingo','08:00','12:00',false]]
     }
   };
 
   const cache = safeParse(localStorage.getItem('nexaflow-public-company-cache'), {});
   const config = safeParse(localStorage.getItem('nexaflow-config'), null);
-  let slug = requestedSlug || (config?.empresa?.nome ? criarSlug(config.empresa.nome) : 'barbearia-imperial');
-  let empresa = structuredClone(empresas[slug] || cache[slug] || empresas['barbearia-imperial']);
+  const configSlug = config?.empresa?.slug || (config?.empresa?.nome ? criarSlug(config.empresa.nome) : '');
+  let slug = requestedSlug || configSlug || 'barbearia-imperial';
+  let empresa = structuredClone(cache[slug] || empresas[slug] || empresas['barbearia-imperial']);
 
-  const configSlug = config?.empresa?.nome ? criarSlug(config.empresa.nome) : '';
   if (config && (!requestedSlug || configSlug === slug)) {
     empresa = {
       ...empresa,
@@ -49,12 +49,28 @@ document.addEventListener('DOMContentLoaded', () => {
       corSecundaria: config.aparencia?.corSecundaria || empresa.corSecundaria,
       horarios: Array.isArray(config.horarios) ? config.horarios : empresa.horarios
     };
-    const servicosLocal = safeParse(localStorage.getItem('nexaflow-servicos'), []).filter(item => item.ativo !== false);
-    const profissionaisLocal = safeParse(localStorage.getItem('nexaflow-profissionais'), []).filter(item => item.ativo !== false);
-    if (servicosLocal.length) empresa.servicos = servicosLocal.map(item => ({ nome: item.nome, preco: Number(item.preco) || 0, duracao: Number(item.duracao) || 30, descricao: item.descricao || '' }));
-    if (profissionaisLocal.length) empresa.profissionais = profissionaisLocal.map(item => ({ nome: item.nome, especialidade: item.especialidade || 'Profissional', servicos: item.servicos || [] }));
-  } else if (cache[slug]) {
-    empresa = { ...empresa, ...cache[slug] };
+
+    const servicosRaw = safeParse(localStorage.getItem('nexaflow-servicos'), null);
+    const profissionaisRaw = safeParse(localStorage.getItem('nexaflow-profissionais'), null);
+
+    if (Array.isArray(servicosRaw)) {
+      empresa.servicos = servicosRaw.filter(item => item.ativo !== false).map(item => ({
+        nome: item.nome,
+        preco: Number(item.preco) || 0,
+        duracao: Number(item.duracao) || 30,
+        descricao: item.descricao || ''
+      }));
+    }
+
+    if (Array.isArray(profissionaisRaw)) {
+      empresa.profissionais = profissionaisRaw.filter(item => item.ativo !== false).map(item => ({
+        nome: item.nome,
+        especialidade: item.especialidade || 'Profissional',
+        servicos: Array.isArray(item.servicos) ? item.servicos : [],
+        inicio: item.inicio || '',
+        fim: item.fim || ''
+      }));
+    }
   }
 
   slug = criarSlug(slug) || criarSlug(empresa.nome) || 'empresa';
@@ -74,27 +90,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.documentElement.style.setProperty('--brand-primary', empresa.corPrincipal || '#2563eb');
   document.documentElement.style.setProperty('--brand-secondary', empresa.corSecundaria || '#7c3aed');
-  document.title = `${empresa.nome} — Agendamento online`;
-  document.querySelector('meta[name="description"]')?.setAttribute('content', empresa.descricao || `Agende online na ${empresa.nome}.`);
+  document.title = `${empresa.nome || 'Empresa'} — Agendamento online`;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', empresa.descricao || `Agende online na ${empresa.nome || 'empresa'}.`);
 
   const logo = iniciais(empresa.nome);
   $('businessLogo').textContent = logo;
   $('businessCardLogo').textContent = logo;
-  $('businessBrandName').textContent = empresa.nome;
-  $('businessCardName').textContent = empresa.nome;
+  $('businessBrandName').textContent = empresa.nome || 'Empresa';
+  $('businessCardName').textContent = empresa.nome || 'Empresa';
   $('businessSegment').textContent = empresa.segmento || 'Serviços';
   $('businessCardSegment').textContent = empresa.segmento || 'Serviços';
-  $('businessHeadline').textContent = empresa.headline || `Bem-vindo à ${empresa.nome}.`;
+  $('businessHeadline').textContent = empresa.headline || `Bem-vindo à ${empresa.nome || 'nossa empresa'}.`;
   $('businessDescription').textContent = empresa.descricao || 'Agende seus serviços de forma simples e rápida.';
   $('businessCity').textContent = [empresa.cidade, empresa.estado].filter(Boolean).join(', ') || 'Localização não informada';
   $('businessPhone').textContent = empresa.whatsapp || empresa.telefone || 'Contato não informado';
-  $('aboutTitle').textContent = `Conheça a ${empresa.nome}.`;
+  $('aboutTitle').textContent = `Conheça a ${empresa.nome || 'empresa'}.`;
   $('aboutDescription').textContent = empresa.descricao || 'Atendimento organizado e próximo de você.';
   $('instagramChip').textContent = empresa.instagram || 'Instagram não informado';
   $('emailChip').textContent = empresa.email || 'E-mail não informado';
-  $('contactBusinessName').textContent = empresa.nome;
+  $('contactBusinessName').textContent = empresa.nome || 'Empresa';
   $('addressText').textContent = [empresa.endereco, empresa.numero, empresa.cidade, empresa.estado].filter(Boolean).join(' — ') || 'Endereço não informado';
-  $('footerBusinessName').textContent = empresa.nome;
+  $('footerBusinessName').textContent = empresa.nome || 'Empresa';
   $('footerBusinessDescription').textContent = empresa.descricao || 'Agendamento online com NexaFlow.';
 
   const telefoneNumeros = apenasNumeros(empresa.telefone);
@@ -114,7 +130,14 @@ document.addEventListener('DOMContentLoaded', () => {
   `).join('') : '<p>Nenhum serviço disponível no momento.</p>';
 
   $('publicProfessionals').innerHTML = empresa.profissionais.length ? empresa.profissionais.map(profissional => `
-    <article class="professional-card"><div class="professional-avatar">${iniciais(profissional.nome)}</div><div><h3>${profissional.nome}</h3><p>${profissional.especialidade || 'Profissional'}</p><div class="professional-tags">${(profissional.servicos || []).map(servico => `<span class="professional-tag">${servico}</span>`).join('')}</div></div></article>
+    <article class="professional-card">
+      <div class="professional-avatar">${iniciais(profissional.nome)}</div>
+      <div>
+        <h3>${profissional.nome}</h3>
+        <p>${profissional.especialidade || 'Profissional'}</p>
+        <div class="professional-tags">${(profissional.servicos || []).map(servico => `<span class="professional-tag">${servico}</span>`).join('')}</div>
+      </div>
+    </article>
   `).join('') : '<p>Nenhum profissional disponível no momento.</p>';
 
   $('hoursList').innerHTML = empresa.horarios.length ? empresa.horarios.map(([dia, inicio, fim, aberto]) => `<div class="hours-row"><span>${dia}</span><strong>${aberto ? `${inicio} — ${fim}` : 'Fechado'}</strong></div>`).join('') : '<p>Horários não informados.</p>';
