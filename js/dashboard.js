@@ -35,13 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const hoje = new Date();
   const isoHoje = new Date(hoje.getTime() - hoje.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const internasEmpresa = agendaInterna.filter(item => !item.companySlug || item.companySlug === companySlug);
   const publicasEmpresa = agendaPublica.filter(item => item.companySlug === companySlug);
-  const agendaCompleta = [...agendaInterna, ...publicasEmpresa.filter(p => !agendaInterna.some(i => i.id === p.id))];
+  const agendaCompleta = [...internasEmpresa, ...publicasEmpresa.filter(p => !internasEmpresa.some(i => Number(i.id) === Number(p.id)))];
   const agendamentosHoje = agendaCompleta.filter(item => item.data === isoHoje && item.status !== 'cancelado');
 
-  const totalClientes = clientes.length || 148;
-  const totalServicos = servicos.length || 8;
-  const totalAgenda = agendamentosHoje.length || 12;
+  const totalClientes = localStorage.getItem('nexaflow-clientes') !== null ? clientes.length : 148;
+  const totalServicos = localStorage.getItem('nexaflow-servicos') !== null ? servicos.length : 8;
+  const possuiAgendaPersistida = localStorage.getItem('nexaflow-agendamentos') !== null || localStorage.getItem('nexaflow-public-bookings') !== null;
+  const totalAgenda = possuiAgendaPersistida ? agendamentosHoje.length : 12;
 
   if (metricCards) {
     metricCards.innerHTML = [
