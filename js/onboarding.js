@@ -20,16 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     numero: document.getElementById('number')
   };
 
-  const safeParse = (value, fallback) => {
-    try { return JSON.parse(value) ?? fallback; } catch (_) { return fallback; }
-  };
+  const safeParse = (value, fallback) => { try { return JSON.parse(value) ?? fallback; } catch (_) { return fallback; } };
+  const slugify = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
   const showError = message => {
     if (!alertBox) { window.alert(message); return; }
     alertBox.textContent = message;
     alertBox.classList.remove('d-none');
   };
-
   const clearError = () => alertBox?.classList.add('d-none');
 
   const validateCurrentStep = () => {
@@ -41,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentStep === 1) {
       if (!fields.cidade.value.trim() || !fields.endereco.value.trim() || !fields.estado.value.trim()) {
         showError('Preencha cidade, endereço e estado para continuar.');
+        return false;
+      }
+      if (fields.estado.value.trim().length !== 2) {
+        showError('Informe o estado com 2 letras, por exemplo SP.');
+        fields.estado.focus();
         return false;
       }
     }
@@ -63,11 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const previous = safeParse(localStorage.getItem('nexaflow-config'), {});
     const contaNome = sessionStorage.getItem('nexaflow-signup-name') || previous?.conta?.nome || 'Administrador';
     const contaEmail = sessionStorage.getItem('nexaflow-signup-email') || previous?.conta?.email || '';
+    const stableSlug = previous?.empresa?.slug || slugify(previous?.empresa?.nome) || slugify(fields.nome.value) || 'empresa';
 
     const data = {
       ...previous,
       empresa: {
         ...(previous.empresa || {}),
+        slug: stableSlug,
         nome: fields.nome.value.trim(),
         segmento: fields.segmento.value,
         telefone: fields.telefone.value.trim(),
@@ -85,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     localStorage.setItem('nexaflow-config', JSON.stringify(data));
+    sessionStorage.removeItem('nexaflow-public-company');
   };
 
   const updateStepState = () => {
