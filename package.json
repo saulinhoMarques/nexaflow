@@ -10,18 +10,20 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
     "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest"
   },
   "devDependencies": {
+    "@eslint/js": "latest",
+    "@tailwindcss/vite": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@typescript-eslint/eslint-plugin": "latest",
-    "@typescript-eslint/parser": "latest",
+    "@vitejs/plugin-react": "latest",
     "eslint": "latest",
+    "globals": "latest",
     "typescript": "latest",
+    "typescript-eslint": "latest",
     "vite": "latest"
   }
 }
