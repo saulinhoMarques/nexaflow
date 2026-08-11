@@ -1,0 +1,32 @@
+.servicos-topbar { align-items: flex-start; }
+.servicos-summary { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.servicos-summary-card { padding: 1.4rem 1.5rem; border-radius: 22px; background: #f8fafc; border: 1px solid rgba(148,163,184,.18); display: grid; gap: .45rem; }
+.servicos-summary-card span { color: var(--nf-text); font-weight: 600; }
+.servicos-summary-card strong { font-size: 1.9rem; color: #0f172a; }
+.servicos-panel { border: 1px solid rgba(148,163,184,.18); border-radius: 24px; padding: 1.25rem; }
+.servicos-toolbar { display: grid; grid-template-columns: minmax(0,1fr) 190px; gap: 1rem; margin-bottom: 1.25rem; }
+.servicos-toolbar .form-control, .servicos-toolbar .form-select, .servico-modal-content .form-control { border-radius: 15px; border: 1px solid rgba(148,163,184,.28); padding: .9rem 1rem; }
+.servicos-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+.servico-card { border: 1px solid rgba(148,163,184,.18); border-radius: 22px; padding: 1.35rem; background: #fff; display: grid; gap: 1rem; }
+.servico-card-top { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+.servico-card h3 { margin: 0 0 .35rem; font-size: 1.15rem; }
+.servico-card p { margin: 0; color: var(--nf-text); line-height: 1.6; }
+.servico-meta { display: flex; flex-wrap: wrap; gap: .65rem; }
+.servico-meta span { display: inline-flex; align-items: center; border-radius: 999px; padding: .5rem .75rem; background: #f8fafc; font-weight: 700; color: #334155; font-size: .9rem; }
+.servico-status { border-radius: 999px; padding: .45rem .7rem; font-size: .8rem; font-weight: 800; }
+.servico-status.ativo { background: #dcfce7; color: #166534; }
+.servico-status.inativo { background: #fee2e2; color: #991b1b; }
+.servico-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.servico-actions button { border: 0; border-radius: 12px; padding: .65rem .8rem; font-weight: 700; }
+.servico-actions .edit { background: #eff6ff; color: #1d4ed8; }
+.servico-actions .toggle { background: #f8fafc; color: #475569; }
+.servico-actions .delete { background: #fff1f2; color: #be123c; }
+.servicos-empty { text-align: center; padding: 3rem 1rem; color: var(--nf-text); }
+.servico-modal-content { border: 0; border-radius: 24px; box-shadow: 0 30px 80px rgba(15,23,42,.15); }
+@media (max-width: 991.98px) {
+  .servicos-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 767.98px) {
+  .servicos-summary { grid-template-columns: 1fr; }
+  .servicos-toolbar { grid-template-columns: 1fr; }
+}
