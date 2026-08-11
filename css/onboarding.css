@@ -1,0 +1,36 @@
+.onboarding-page { min-height: calc(100vh - 170px); background: var(--nf-surface); }
+.onboarding-card { max-width: 760px; margin: 0 auto; background: #fff; border: 1px solid rgba(148,163,184,.18); border-radius: 28px; box-shadow: 0 30px 80px rgba(15,23,42,.08); padding: 2.5rem; }
+.onboarding-heading h1 { margin: 0.5rem 0 0.75rem; font-size: clamp(2rem, 2.5vw, 2.8rem); line-height: 1.05; }
+.onboarding-heading p { color: var(--nf-text); max-width: 680px; margin: 0 auto; }
+.onboarding-progress { margin-top: 1.75rem; }
+.progress-labels { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.step-pill { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--nf-border); color: var(--nf-muted); background: #f8fafc; font-weight: 700; }
+.step-pill.active { background: linear-gradient(135deg, var(--nf-primary), var(--nf-accent)); border-color: transparent; color: #fff; box-shadow: 0 15px 30px rgba(37,99,235,.15); }
+.progress-bar { height: 12px; width: 100%; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+.progress-fill { width: 25%; height: 100%; background: linear-gradient(90deg, var(--nf-primary), var(--nf-accent)); transition: width .3s ease; }
+.progress-text { margin-top: .85rem; font-size: .95rem; color: var(--nf-text); }
+.onboarding-step { display: none; }
+.onboarding-step.active { display: block; }
+.step-title h2 { margin-bottom: .5rem; font-size: 1.55rem; font-weight: 800; }
+.step-title p { margin-bottom: 1.75rem; color: var(--nf-text); }
+.field-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0,1fr)); }
+.field-grid > div { display: flex; flex-direction: column; gap: .5rem; }
+.form-control { border-radius: 16px; border: 1px solid rgba(148,163,184,.28); padding: 1rem 1rem; }
+.form-control:focus { box-shadow: 0 0 0 .2rem rgba(37,99,235,.12); border-color: var(--nf-primary); }
+.schedule-grid { display: grid; gap: 0.85rem; margin-top: 1rem; }
+.schedule-row { display: grid; grid-template-columns: 160px 1fr 1fr; gap: .75rem; align-items: center; border-radius: 18px; background: #f8fafc; padding: .9rem 1rem; }
+.schedule-row span { font-weight: 700; color: #0f172a; }
+.schedule-row input, .schedule-row select { border-radius: 14px; border: 1px solid rgba(148,163,184,.28); padding: .85rem .95rem; background: #fff; }
+.schedule-note { color: var(--nf-text); margin-top: .75rem; font-size: .95rem; }
+.onboarding-actions { margin-top: 1.75rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.onboarding-actions .btn { min-width: 140px; }
+.onboarding-summary { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.summary-card { padding: 1.25rem 1.35rem; border-radius: 20px; background: #f8fafc; border: 1px solid rgba(148,163,184,.18); }
+.summary-card strong { display: block; margin-bottom: .5rem; font-size: 1rem; }
+.summary-card p { margin: 0; color: var(--nf-text); line-height: 1.7; }
+@media (max-width: 767.98px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .schedule-row { grid-template-columns: 1fr; }
+  .schedule-row input, .schedule-row select { width: 100%; }
+  .progress-labels { justify-content: space-between; gap: .75rem; }
+}

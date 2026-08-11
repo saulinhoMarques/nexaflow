@@ -1,0 +1,29 @@
+.dashboard-page { min-height: calc(100vh - 170px); background: var(--nf-surface); }
+.dashboard-layout { display: grid; grid-template-columns: 260px 1fr; gap: 1.75rem; }
+.dashboard-sidebar { background: #0f172a; border-radius: 28px; padding: 2rem; color: #cbd5e1; }
+.sidebar-brand { display: inline-flex; align-items: center; gap: .75rem; font-size: 1.35rem; font-weight: 800; margin-bottom: 2rem; }
+.sidebar-nav { display: grid; gap: .75rem; }
+.sidebar-nav a { display: inline-flex; align-items: center; padding: .95rem 1rem; border-radius: 18px; color: #cbd5e1; background: rgba(148,163,184,.06); text-decoration: none; font-weight: 600; }
+.sidebar-nav a.active, .sidebar-nav a:hover { background: rgba(96,165,250,.15); color: #fff; }
+.dashboard-content { background: #fff; border-radius: 28px; padding: 2rem; box-shadow: 0 30px 80px rgba(15,23,42,.08); }
+.dashboard-topbar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 2rem; }
+.dashboard-topbar h1 { margin: .4rem 0 0; font-size: clamp(1.9rem, 2.3vw, 2.5rem); }
+.topbar-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+.dashboard-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; margin-bottom: 1.75rem; }
+.dashboard-card { border-radius: 24px; padding: 1.75rem; background: #eff6ff; min-height: 140px; display: grid; gap: .75rem; }
+.dashboard-card strong { font-size: 2.85rem; line-height: 1; color: var(--nf-primary); }
+.dashboard-card p { color: var(--nf-text); font-weight: 700; }
+.dashboard-panel { border-radius: 24px; border: 1px solid rgba(148,163,184,.18); overflow: hidden; }
+.panel-header { padding: 1.5rem 1.75rem; background: #f8fafc; }
+.panel-header h2 { margin: 0; font-size: 1.35rem; }
+.panel-body { display: grid; gap: .5rem; padding: 1.25rem 1.75rem 1.75rem; }
+.appointment-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; padding: 1rem; border-radius: 18px; background: #fff; border: 1px solid rgba(148,163,184,.14); align-items: center; }
+.appointment-row span { font-weight: 600; color: #0f172a; }
+@media (max-width: 991.98px) {
+  .dashboard-layout { grid-template-columns: 1fr; }
+  .dashboard-cards { grid-template-columns: 1fr; }
+  .appointment-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 575.98px) {
+  .dashboard-topbar { flex-direction: column; align-items: flex-start; }
+}
