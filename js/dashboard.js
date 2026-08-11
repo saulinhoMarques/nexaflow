@@ -67,8 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (panelBody && agendaCompleta.length) {
+    const agora = new Date();
+    const horaAgora = `${String(agora.getHours()).padStart(2, '0')}:${String(agora.getMinutes()).padStart(2, '0')}`;
+    const chaveAgora = `${isoHoje} ${horaAgora}`;
     const proximos = agendaCompleta
-      .filter(item => item.status !== 'cancelado')
+      .filter(item => item.status !== 'cancelado' && `${item.data || ''} ${item.hora || ''}` >= chaveAgora)
       .sort((a, b) => `${a.data || ''} ${a.hora || ''}`.localeCompare(`${b.data || ''} ${b.hora || ''}`))
       .slice(0, 5);
 
