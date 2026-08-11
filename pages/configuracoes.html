@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Configurações NexaFlow — personalize os dados, horários, aparência e preferências do seu negócio.">
+  <title>Configurações — NexaFlow</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/configuracoes.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container py-2">
+        <a class="brand" href="../index.html" aria-label="NexaFlow início">
+          <span class="brand-mark">N</span>
+          <span>Nexa<span>Flow</span></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#configNav" aria-controls="configNav" aria-expanded="false" aria-label="Abrir menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="configNav">
+          <ul class="navbar-nav mx-auto gap-lg-2">
+            <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">Sair</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+            <span class="dashboard-user">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="dashboard-page section-padding">
+    <div class="container-fluid">
+      <div class="dashboard-layout">
+        <aside class="dashboard-sidebar">
+          <div class="sidebar-brand">NexaFlow</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="agenda.html">Agenda</a>
+            <a href="clientes.html">Clientes</a>
+            <a href="servicos.html">Serviços</a>
+            <a href="profissionais.html">Profissionais</a>
+            <a href="relatorios.html">Relatórios</a>
+            <a href="configuracoes.html" class="active">Configurações</a>
+          </nav>
+        </aside>
+
+        <section class="dashboard-content configuracoes-content">
+          <div class="dashboard-topbar configuracoes-topbar">
+            <div>
+              <span class="eyebrow">Personalização</span>
+              <h1>Configurações</h1>
+              <p>Centralize as informações do negócio, preferências e identidade visual.</p>
+            </div>
+            <button class="btn btn-primary-custom" id="salvarTudoBtn">Salvar alterações</button>
+          </div>
+
+          <div class="config-layout">
+            <aside class="config-tabs" aria-label="Seções de configuração">
+              <button class="config-tab active" data-tab="negocio">Negócio</button>
+              <button class="config-tab" data-tab="aparencia">Aparência</button>
+              <button class="config-tab" data-tab="horarios">Horários</button>
+              <button class="config-tab" data-tab="notificacoes">Notificações</button>
+              <button class="config-tab" data-tab="conta">Conta</button>
+            </aside>
+
+            <div class="config-panels">
+              <section class="config-panel active" data-panel="negocio">
+                <div class="config-card">
+                  <div class="config-card-header">
+                    <div>
+                      <h2>Dados do negócio</h2>
+                      <p>Essas informações serão usadas no painel e na futura página pública.</p>
+                    </div>
+                  </div>
+
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="empresaNome" class="form-label">Nome da empresa</label>
+                      <input id="empresaNome" class="form-control" type="text" value="Barbearia Imperial">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="empresaSegmento" class="form-label">Segmento</label>
+                      <input id="empresaSegmento" class="form-control" type="text" value="Barbearia">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="empresaTelefone" class="form-label">Telefone</label>
+                      <input id="empresaTelefone" class="form-control" type="tel" value="(11) 4000-1234">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="empresaWhatsapp" class="form-label">WhatsApp</label>
+                      <input id="empresaWhatsapp" class="form-control" type="tel" value="(11) 99999-1234">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="empresaEmail" class="form-label">E-mail</label>
+                      <input id="empresaEmail" class="form-control" type="email" value="contato@barbeariaimperial.com.br">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="empresaInstagram" class="form-label">Instagram</label>
+                      <input id="empresaInstagram" class="form-control" type="text" value="@barbeariaimperial">
+                    </div>
+                    <div class="col-12">
+                      <label for="empresaDescricao" class="form-label">Descrição</label>
+                      <textarea id="empresaDescricao" class="form-control" rows="4">Corte, barba e estilo com atendimento profissional.</textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="config-card">
+                  <h2>Endereço</h2>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label for="empresaCep" class="form-label">CEP</label>
+                      <input id="empresaCep" class="form-control" type="text" value="01001-000">
+                    </div>
+                    <div class="col-md-8">
+                      <label for="empresaEndereco" class="form-label">Endereço</label>
+                      <input id="empresaEndereco" class="form-control" type="text" value="Praça da Sé">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="empresaNumero" class="form-label">Número</label>
+                      <input id="empresaNumero" class="form-control" type="text" value="100">
+                    </div>
+                    <div class="col-md-5">
+                      <label for="empresaCidade" class="form-label">Cidade</label>
+                      <input id="empresaCidade" class="form-control" type="text" value="São Paulo">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="empresaEstado" class="form-label">Estado</label>
+                      <input id="empresaEstado" class="form-control" type="text" value="SP">
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="config-panel" data-panel="aparencia">
+                <div class="config-card">
+                  <h2>Identidade visual</h2>
+                  <p class="config-help">Essas cores serão usadas futuramente na página pública do negócio.</p>
+
+                  <div class="appearance-grid">
+                    <div class="logo-preview-wrap">
+                      <div class="logo-preview" id="logoPreview">BI</div>
+                      <div>
+                        <strong>Logo da empresa</strong>
+                        <p>Prévia visual mockada. O upload real será conectado depois ao Supabase Storage.</p>
+                        <button class="btn btn-outline-custom btn-sm" type="button" id="trocarLogoBtn">Simular nova logo</button>
+                      </div>
+                    </div>
+
+                    <div class="color-fields">
+                      <label class="color-field">
+                        <span>Cor principal</span>
+                        <input id="corPrincipal" type="color" value="#2563eb">
+                      </label>
+                      <label class="color-field">
+                        <span>Cor secundária</span>
+                        <input id="corSecundaria" type="color" value="#7c3aed">
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="brand-preview" id="brandPreview">
+                    <span>Prévia da marca</span>
+                    <strong>Barbearia Imperial</strong>
+                    <button class="btn btn-light btn-sm" type="button">Agendar horário</button>
+                  </div>
+                </div>
+              </section>
+
+              <section class="config-panel" data-panel="horarios">
+                <div class="config-card">
+                  <h2>Horários de funcionamento</h2>
+                  <p class="config-help">Defina quando sua empresa está aberta para novos atendimentos.</p>
+                  <div class="schedule-settings" id="scheduleSettings"></div>
+                </div>
+              </section>
+
+              <section class="config-panel" data-panel="notificacoes">
+                <div class="config-card">
+                  <h2>Notificações</h2>
+                  <div class="switch-list">
+                    <label class="switch-row">
+                      <div><strong>Novo agendamento</strong><span>Receber aviso quando um novo agendamento for criado.</span></div>
+                      <input class="form-check-input" type="checkbox" id="notifNovo" checked>
+                    </label>
+                    <label class="switch-row">
+                      <div><strong>Cancelamentos</strong><span>Receber aviso quando um cliente cancelar.</span></div>
+                      <input class="form-check-input" type="checkbox" id="notifCancelamento" checked>
+                    </label>
+                    <label class="switch-row">
+                      <div><strong>Lembretes</strong><span>Receber lembretes de atendimentos próximos.</span></div>
+                      <input class="form-check-input" type="checkbox" id="notifLembretes" checked>
+                    </label>
+                    <label class="switch-row">
+                      <div><strong>Resumo semanal</strong><span>Receber um resumo semanal do desempenho do negócio.</span></div>
+                      <input class="form-check-input" type="checkbox" id="notifResumo">
+                    </label>
+                  </div>
+                </div>
+              </section>
+
+              <section class="config-panel" data-panel="conta">
+                <div class="config-card">
+                  <h2>Conta do administrador</h2>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="contaNome" class="form-label">Nome</label>
+                      <input id="contaNome" class="form-control" type="text" value="João Silva">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="contaEmail" class="form-label">E-mail</label>
+                      <input id="contaEmail" class="form-control" type="email" value="joao@nexaflow.demo">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="config-card danger-zone">
+                  <h2>Zona de risco</h2>
+                  <p>Essas ações serão protegidas por confirmação quando a autenticação real estiver ativa.</p>
+                  <div class="danger-actions">
+                    <button class="btn btn-outline-danger" type="button" id="resetMockBtn">Restaurar configurações mockadas</button>
+                    <button class="btn btn-outline-danger" type="button" disabled>Excluir conta</button>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="config-toast" id="configToast" role="status" aria-live="polite">Alterações salvas.</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/configuracoes.js"></script>
+</body>
+</html>
