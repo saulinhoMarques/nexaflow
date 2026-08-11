@@ -2,6 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const hoje = new Date();
   const iso = d => d.toISOString().slice(0, 10);
   const addDays = n => { const d = new Date(hoje); d.setDate(d.getDate() + n); return iso(d); };
+  const slugify = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  let companySlug = 'barbearia-imperial';
+  try {
+    const config = JSON.parse(localStorage.getItem('nexaflow-config') || 'null');
+    if (config?.empresa?.nome) companySlug = slugify(config.empresa.nome) || companySlug;
+  } catch (_) {}
 
   const clientes = ['João Silva', 'Pedro Santos', 'Marcos Oliveira', 'Ana Costa', 'Lucas Martins'];
   const servicos = [
@@ -20,6 +27,24 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 5, cliente: 'Lucas Martins', servico: 'Corte masculino', profissional: 'Carlos Mendes', data: addDays(1), hora: '11:00', status: 'confirmado', observacoes: '' }
   ];
 
+  function getPublicBookings() {
+    try { return JSON.parse(localStorage.getItem('nexaflow-public-bookings') || '[]'); }
+    catch (_) { return []; }
+  }
+
+  getPublicBookings().filter(b => b.companySlug === companySlug).forEach(b => {
+    if (!agendamentos.some(a => a.id === b.id)) agendamentos.push({ ...b, origem: 'publico' });
+    if (b.cliente && !clientes.includes(b.cliente)) clientes.push(b.cliente);
+    if (b.profissional && !profissionais.includes(b.profissional)) profissionais.push(b.profissional);
+    if (b.servico && !servicos.some(s => s.nome === b.servico)) servicos.push({ nome: b.servico, duracao: b.duracao || 30 });
+  });
+
+  function persistPublicBookings() {
+    const all = getPublicBookings().filter(b => b.companySlug !== companySlug);
+    const current = agendamentos.filter(a => a.origem === 'publico').map(a => ({ ...a, companySlug }));
+    localStorage.setItem('nexaflow-public-bookings', JSON.stringify([...all, ...current]));
+  }
+
   const view = document.getElementById('agendaView');
   const empty = document.getElementById('agendaEmpty');
   const busca = document.getElementById('agendaBusca');
@@ -30,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalEl = document.getElementById('agendamentoModal');
   const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
   const conflictAlert = document.getElementById('agendaConflictAlert');
-
   const idField = document.getElementById('agendamentoId');
   const clienteField = document.getElementById('agendamentoCliente');
   const servicoField = document.getElementById('agendamentoServico');
@@ -40,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusField = document.getElementById('agendamentoStatus');
   const obsField = document.getElementById('agendamentoObservacoes');
   const modalTitle = document.getElementById('agendamentoModalLabel');
-
   let currentView = 'dia';
 
   const normalizar = v => String(v || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -57,10 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const termo = normalizar(busca.value);
     return agendamentos.filter(a => {
       const texto = normalizar([a.cliente, a.servico, a.profissional, a.observacoes].join(' '));
-      const okBusca = !termo || texto.includes(termo);
-      const okStatus = filtroStatus.value === 'todos' || a.status === filtroStatus.value;
-      const okProf = filtroProfissional.value === 'todos' || a.profissional === filtroProfissional.value;
-      return okBusca && okStatus && okProf;
+      return (!termo || texto.includes(termo)) && (filtroStatus.value === 'todos' || a.status === filtroStatus.value) && (filtroProfissional.value === 'todos' || a.profissional === filtroProfissional.value);
     }).sort((a, b) => `${a.data} ${a.hora}`.localeCompare(`${b.data} ${b.hora}`));
   }
 
@@ -73,144 +93,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function card(a) {
-    return `<article class="agendamento-card">
-      <div class="hora">${a.hora}</div>
-      <div><small>Cliente</small><strong>${a.cliente}</strong></div>
-      <div><small>Serviço</small><strong>${a.servico}</strong></div>
-      <div><small>Profissional</small><strong>${a.profissional}</strong></div>
-      <span class="status-badge status-${a.status}">${a.status}</span>
-      <div class="agendamento-actions">
-        <button class="btn btn-outline-custom btn-sm" data-action="editar" data-id="${a.id}">Editar</button>
-        ${a.status !== 'concluido' && a.status !== 'cancelado' ? `<button class="btn btn-outline-success btn-sm" data-action="concluir" data-id="${a.id}">Concluir</button>` : ''}
-        ${a.status !== 'cancelado' ? `<button class="btn btn-outline-danger btn-sm" data-action="cancelar" data-id="${a.id}">Cancelar</button>` : ''}
-      </div>
-    </article>`;
+    const origem = a.origem === 'publico' ? '<span class="status-badge status-pendente">Online</span>' : '';
+    return `<article class="agendamento-card"><div class="hora">${a.hora}</div><div><small>Cliente</small><strong>${a.cliente}</strong></div><div><small>Serviço</small><strong>${a.servico}</strong></div><div><small>Profissional</small><strong>${a.profissional}</strong></div><div><span class="status-badge status-${a.status}">${a.status}</span>${origem}</div><div class="agendamento-actions"><button class="btn btn-outline-custom btn-sm" data-action="editar" data-id="${a.id}">Editar</button>${a.status !== 'concluido' && a.status !== 'cancelado' ? `<button class="btn btn-outline-success btn-sm" data-action="concluir" data-id="${a.id}">Concluir</button>` : ''}${a.status !== 'cancelado' ? `<button class="btn btn-outline-danger btn-sm" data-action="cancelar" data-id="${a.id}">Cancelar</button>` : ''}</div></article>`;
   }
 
   function renderDia(items) {
-    const hojeIso = iso(new Date());
-    const dia = items.filter(a => a.data === hojeIso);
+    const hojeIso = iso(new Date()); const dia = items.filter(a => a.data === hojeIso);
     view.innerHTML = dia.length ? `<div class="agenda-day-group"><div class="agenda-day-title"><h3>Hoje · ${formatDate(hojeIso)}</h3><span>${dia.length} atendimento(s)</span></div>${dia.map(card).join('')}</div>` : '';
   }
-
   function renderSemana(items) {
     const dias = Array.from({ length: 7 }, (_, i) => addDays(i));
-    view.innerHTML = `<div class="agenda-week-grid">${dias.map(d => {
-      const list = items.filter(a => a.data === d);
-      return `<section class="week-column"><h3>${formatDate(d)}</h3>${list.length ? list.map(a => `<div class="week-item"><strong>${a.hora} · ${a.cliente}</strong><small>${a.servico}</small><small>${a.profissional}</small></div>`).join('') : '<small>Sem agendamentos</small>'}</section>`;
-    }).join('')}</div>`;
+    view.innerHTML = `<div class="agenda-week-grid">${dias.map(d => { const list = items.filter(a => a.data === d); return `<section class="week-column"><h3>${formatDate(d)}</h3>${list.length ? list.map(a => `<div class="week-item"><strong>${a.hora} · ${a.cliente}</strong><small>${a.servico}</small><small>${a.profissional}</small>${a.origem === 'publico' ? '<small>Agendamento online</small>' : ''}</div>`).join('') : '<small>Sem agendamentos</small>'}</section>`; }).join('')}</div>`;
   }
-
   function renderLista(items) {
-    view.innerHTML = items.length ? `<div class="agenda-list-wrap"><table class="agenda-list-table"><thead><tr><th>Data</th><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Profissional</th><th>Status</th><th>Ações</th></tr></thead><tbody>${items.map(a => `<tr><td>${formatDate(a.data)}</td><td>${a.hora}</td><td>${a.cliente}</td><td>${a.servico}</td><td>${a.profissional}</td><td><span class="status-badge status-${a.status}">${a.status}</span></td><td><div class="agendamento-actions"><button class="btn btn-outline-custom btn-sm" data-action="editar" data-id="${a.id}">Editar</button>${a.status !== 'concluido' && a.status !== 'cancelado' ? `<button class="btn btn-outline-success btn-sm" data-action="concluir" data-id="${a.id}">Concluir</button>` : ''}${a.status !== 'cancelado' ? `<button class="btn btn-outline-danger btn-sm" data-action="cancelar" data-id="${a.id}">Cancelar</button>` : ''}</div></td></tr>`).join('')}</tbody></table></div>` : '';
+    view.innerHTML = items.length ? `<div class="agenda-list-wrap"><table class="agenda-list-table"><thead><tr><th>Data</th><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Profissional</th><th>Status</th><th>Ações</th></tr></thead><tbody>${items.map(a => `<tr><td>${formatDate(a.data)}</td><td>${a.hora}</td><td>${a.cliente}${a.origem === 'publico' ? '<br><small>Online</small>' : ''}</td><td>${a.servico}</td><td>${a.profissional}</td><td><span class="status-badge status-${a.status}">${a.status}</span></td><td><div class="agendamento-actions"><button class="btn btn-outline-custom btn-sm" data-action="editar" data-id="${a.id}">Editar</button>${a.status !== 'concluido' && a.status !== 'cancelado' ? `<button class="btn btn-outline-success btn-sm" data-action="concluir" data-id="${a.id}">Concluir</button>` : ''}${a.status !== 'cancelado' ? `<button class="btn btn-outline-danger btn-sm" data-action="cancelar" data-id="${a.id}">Cancelar</button>` : ''}</div></td></tr>`).join('')}</tbody></table></div>` : '';
   }
 
-  function render() {
-    const items = dadosFiltrados();
-    if (currentView === 'dia') renderDia(items);
-    if (currentView === 'semana') renderSemana(items);
-    if (currentView === 'lista') renderLista(items);
-    empty.classList.toggle('d-none', view.textContent.trim().length > 0);
-    atualizarResumo();
-  }
-
-  function limparForm() {
-    form.reset();
-    idField.value = '';
-    dataField.value = iso(new Date());
-    horaField.value = '09:00';
-    statusField.value = 'confirmado';
-    conflictAlert.classList.add('d-none');
-    conflictAlert.textContent = '';
-    modalTitle.textContent = 'Novo agendamento';
-  }
-
-  function editar(id) {
-    const a = agendamentos.find(x => x.id === id);
-    if (!a) return;
-    idField.value = a.id;
-    clienteField.value = a.cliente;
-    servicoField.value = a.servico;
-    profissionalField.value = a.profissional;
-    dataField.value = a.data;
-    horaField.value = a.hora;
-    statusField.value = a.status;
-    obsField.value = a.observacoes || '';
-    modalTitle.textContent = 'Editar agendamento';
-    conflictAlert.classList.add('d-none');
-    modal.show();
-  }
+  function render() { const items = dadosFiltrados(); if (currentView === 'dia') renderDia(items); if (currentView === 'semana') renderSemana(items); if (currentView === 'lista') renderLista(items); empty.classList.toggle('d-none', view.textContent.trim().length > 0); atualizarResumo(); }
+  function limparForm() { form.reset(); idField.value = ''; dataField.value = iso(new Date()); horaField.value = '09:00'; statusField.value = 'confirmado'; conflictAlert.classList.add('d-none'); conflictAlert.textContent = ''; modalTitle.textContent = 'Novo agendamento'; }
+  function editar(id) { const a = agendamentos.find(x => x.id === id); if (!a) return; idField.value = a.id; clienteField.value = a.cliente; servicoField.value = a.servico; profissionalField.value = a.profissional; dataField.value = a.data; horaField.value = a.hora; statusField.value = a.status; obsField.value = a.observacoes || ''; modalTitle.textContent = 'Editar agendamento'; conflictAlert.classList.add('d-none'); modal.show(); }
 
   function temConflito(novo, ignoreId) {
-    const servico = servicos.find(s => s.nome === novo.servico);
-    const duracao = servico?.duracao || 30;
-    const toMinutes = h => { const [hh, mm] = h.split(':').map(Number); return hh * 60 + mm; };
-    const inicioNovo = toMinutes(novo.hora);
-    const fimNovo = inicioNovo + duracao;
-
-    return agendamentos.some(a => {
-      if (a.id === ignoreId || a.status === 'cancelado' || a.data !== novo.data || a.profissional !== novo.profissional) return false;
-      const servicoExistente = servicos.find(s => s.nome === a.servico);
-      const inicioExistente = toMinutes(a.hora);
-      const fimExistente = inicioExistente + (servicoExistente?.duracao || 30);
-      return inicioNovo < fimExistente && fimNovo > inicioExistente;
-    });
+    const servico = servicos.find(s => s.nome === novo.servico); const duracao = servico?.duracao || 30;
+    const toMinutes = h => { const [hh, mm] = h.split(':').map(Number); return hh * 60 + mm; }; const inicioNovo = toMinutes(novo.hora), fimNovo = inicioNovo + duracao;
+    return agendamentos.some(a => { if (a.id === ignoreId || a.status === 'cancelado' || a.data !== novo.data || a.profissional !== novo.profissional) return false; const servicoExistente = servicos.find(s => s.nome === a.servico); const inicioExistente = toMinutes(a.hora); const fimExistente = inicioExistente + (servicoExistente?.duracao || a.duracao || 30); return inicioNovo < fimExistente && fimNovo > inicioExistente; });
   }
 
   view.addEventListener('click', event => {
-    const btn = event.target.closest('[data-action]');
-    if (!btn) return;
-    const id = Number(btn.dataset.id);
-    const item = agendamentos.find(a => a.id === id);
-    if (!item) return;
+    const btn = event.target.closest('[data-action]'); if (!btn) return; const id = Number(btn.dataset.id); const item = agendamentos.find(a => a.id === id); if (!item) return;
     if (btn.dataset.action === 'editar') editar(id);
-    if (btn.dataset.action === 'concluir') { item.status = 'concluido'; render(); }
-    if (btn.dataset.action === 'cancelar') { item.status = 'cancelado'; render(); }
+    if (btn.dataset.action === 'concluir') { item.status = 'concluido'; if (item.origem === 'publico') persistPublicBookings(); render(); }
+    if (btn.dataset.action === 'cancelar') { item.status = 'cancelado'; if (item.origem === 'publico') persistPublicBookings(); render(); }
   });
-
-  tabs.forEach(tab => tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.toggle('active', t === tab));
-    currentView = tab.dataset.view;
-    render();
-  }));
-
+  tabs.forEach(tab => tab.addEventListener('click', () => { tabs.forEach(t => t.classList.toggle('active', t === tab)); currentView = tab.dataset.view; render(); }));
   form.addEventListener('submit', event => {
-    event.preventDefault();
-    const id = Number(idField.value);
-    const dados = {
-      cliente: clienteField.value,
-      servico: servicoField.value,
-      profissional: profissionalField.value,
-      data: dataField.value,
-      hora: horaField.value,
-      status: statusField.value,
-      observacoes: obsField.value.trim()
-    };
-
-    if (temConflito(dados, id || null)) {
-      conflictAlert.textContent = 'Conflito de horário: este profissional já possui outro atendimento nesse intervalo.';
-      conflictAlert.classList.remove('d-none');
-      return;
-    }
-
-    if (id) {
-      const index = agendamentos.findIndex(a => a.id === id);
-      if (index >= 0) agendamentos[index] = { ...agendamentos[index], ...dados };
-    } else {
-      agendamentos.push({ id: Date.now(), ...dados });
-    }
-
-    modal.hide();
-    limparForm();
-    render();
+    event.preventDefault(); const id = Number(idField.value); const dados = { cliente: clienteField.value, servico: servicoField.value, profissional: profissionalField.value, data: dataField.value, hora: horaField.value, status: statusField.value, observacoes: obsField.value.trim() };
+    if (temConflito(dados, id || null)) { conflictAlert.textContent = 'Conflito de horário: este profissional já possui outro atendimento nesse intervalo.'; conflictAlert.classList.remove('d-none'); return; }
+    if (id) { const index = agendamentos.findIndex(a => a.id === id); if (index >= 0) { const wasPublic = agendamentos[index].origem === 'publico'; agendamentos[index] = { ...agendamentos[index], ...dados }; if (wasPublic) persistPublicBookings(); } }
+    else agendamentos.push({ id: Date.now(), ...dados });
+    modal.hide(); limparForm(); render();
   });
-
-  modalEl.addEventListener('hidden.bs.modal', limparForm);
-  busca.addEventListener('input', render);
-  filtroStatus.addEventListener('change', render);
-  filtroProfissional.addEventListener('change', render);
-
-  preencherSelects();
-  limparForm();
-  render();
+  modalEl.addEventListener('hidden.bs.modal', limparForm); busca.addEventListener('input', render); filtroStatus.addEventListener('change', render); filtroProfissional.addEventListener('change', render);
+  preencherSelects(); limparForm(); render();
 });
