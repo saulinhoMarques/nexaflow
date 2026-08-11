@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-  const companySlug = slugify(config?.empresa?.nome) || 'barbearia-imperial';
+  const companySlug = config?.empresa?.slug || slugify(config?.empresa?.nome) || 'barbearia-imperial';
   const nomeConta = config?.conta?.nome || sessionStorage.getItem('nexaflow-signup-name') || 'João';
   const primeiroNome = String(nomeConta).trim().split(/\s+/)[0] || 'João';
   const hora = new Date().getHours();
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  if (panelBody && agendaCompleta.length) {
+  if (panelBody) {
     const agora = new Date();
     const horaAgora = `${String(agora.getHours()).padStart(2, '0')}:${String(agora.getMinutes()).padStart(2, '0')}`;
     const chaveAgora = `${isoHoje} ${horaAgora}`;
@@ -75,15 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((a, b) => `${a.data || ''} ${a.hora || ''}`.localeCompare(`${b.data || ''} ${b.hora || ''}`))
       .slice(0, 5);
 
-    if (proximos.length) {
-      panelBody.innerHTML = proximos.map(item => `
-        <div class="appointment-row">
-          <span>${item.cliente || 'Cliente'}</span>
-          <span>${item.servico || 'Serviço'}</span>
-          <span>${item.hora || '--:--'}</span>
-          <span>${String(item.status || 'pendente').replace(/^./, c => c.toUpperCase())}</span>
-        </div>
-      `).join('');
-    }
+    panelBody.innerHTML = proximos.length ? proximos.map(item => `
+      <div class="appointment-row">
+        <span>${item.cliente || 'Cliente'}</span>
+        <span>${item.servico || 'Serviço'}</span>
+        <span>${item.hora || '--:--'}</span>
+        <span>${String(item.status || 'pendente').replace(/^./, c => c.toUpperCase())}</span>
+      </div>
+    `).join('') : '<p class="mb-0 text-muted">Nenhum próximo agendamento.</p>';
   }
 });
