@@ -23,7 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (existing) {
       if (booking.telefone && !existing.telefone) existing.telefone = booking.telefone;
       if (booking.email && !existing.email) existing.email = booking.email;
-      if (!existing.historico.includes(historyEntry)) existing.historico.unshift(historyEntry);
+      if (!existing.historico.includes(historyEntry)) {
+        existing.historico.unshift(historyEntry);
+        existing.agendamentos = Number(existing.agendamentos || 0) + 1;
+        existing.ultimo = booking.data ? `${booking.data}, ${booking.hora || ''}` : 'Agendamento online';
+      }
     } else {
       clientes.unshift({
         id: booking.id || Date.now(), nome: booking.cliente, telefone: booking.telefone || '', email: booking.email || '',
